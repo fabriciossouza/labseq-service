@@ -7,7 +7,6 @@ import java.util.List;
 
 @ApplicationScoped
 public class SequenceNumberService {
-
     private List<Long> cache;
 
     public SequenceNumberService() {
