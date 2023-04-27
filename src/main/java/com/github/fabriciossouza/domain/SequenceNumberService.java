@@ -1,33 +1,32 @@
 package com.github.fabriciossouza.domain;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SequenceNumberService {
 
-    private Map<Integer, Long> memo;
+    private List<Long> cache;
 
     public SequenceNumberService() {
-        memo = new HashMap<>();
-        memo.put(0, 0L);
-        memo.put(1, 1L);
-        memo.put(2, 0L);
-        memo.put(3, 1L);
+        cache = new ArrayList<>();
+        cache.add(0L);
+        cache.add(1L);
+        cache.add(0L);
+        cache.add(1L);
     }
 
-    public long get(int n) {
-        if (n < 0) {
-            throw new IllegalArgumentException("n must be non-negative");
+    public long get(int number) {
+        if (number < 0) {
+            throw new IllegalArgumentException("number must be non-negative");
         }
 
-        if (!memo.containsKey(n)) {
-            for (int i = 4; i <= n; i++) {
-                if (!memo.containsKey(i)) {
-                    long result = memo.get(i - 4) + memo.get(i - 3);
-                    memo.put(i, result);
-                }
-            }
+        while (number >= cache.size()) {
+            int size = cache.size();
+            long valueAtNMinus4 = cache.get(size - 4);
+            long valueAtNMinus3 = cache.get(size - 3);
+            long result = valueAtNMinus4 + valueAtNMinus3;
+            cache.add(result);
         }
-        return memo.get(n);
+        return cache.get(number);
     }
 }
