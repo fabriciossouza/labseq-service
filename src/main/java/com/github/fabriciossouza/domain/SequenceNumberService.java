@@ -10,7 +10,7 @@ public class SequenceNumberService {
     private List<Long> cache;
 
     public SequenceNumberService() {
-        cache = new ArrayList<>();
+        cache = new ArrayList();
         cache.add(0L);
         cache.add(1L);
         cache.add(0L);
@@ -22,13 +22,17 @@ public class SequenceNumberService {
             throw new IllegalArgumentException("Illegal argument: number must be non-negative");
         }
 
-        while (number >= cache.size()) {
-            int size = cache.size();
+        while (number >= getSize()) {
+            int size = getSize();
             long valueAtNMinus4 = cache.get(size - 4);
             long valueAtNMinus3 = cache.get(size - 3);
             long result = valueAtNMinus4 + valueAtNMinus3;
             cache.add(result);
         }
         return cache.get(number);
+    }
+
+    private int getSize() {
+        return cache.size();
     }
 }
