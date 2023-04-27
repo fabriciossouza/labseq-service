@@ -1,7 +1,10 @@
 package com.github.fabriciossouza.application;
 
 import com.github.fabriciossouza.domain.SequenceNumberService;
+import jakarta.enterprise.context.ApplicationScoped;
 
+
+@ApplicationScoped
 public class SequenceNumberApplication {
 
     private SequenceNumberService sequenceNumberService;
