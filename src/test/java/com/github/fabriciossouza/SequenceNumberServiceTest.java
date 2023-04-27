@@ -35,6 +35,11 @@ public class SequenceNumberServiceTest {
     }
 
     @Test
+    public void testLargeValue() {
+        assertEquals(182376579, sequenceNumberService.get(100));
+    }
+
+    @Test
     public void testNegativeValue() {
         assertThrows(IllegalArgumentException.class, () -> sequenceNumberService.get(-1));
     }
