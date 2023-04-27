@@ -5,7 +5,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @ApplicationScoped
 public class SequenceNumberService {
 
@@ -21,7 +20,7 @@ public class SequenceNumberService {
 
     public long get(int number) {
         if (number < 0) {
-            throw new IllegalArgumentException("number must be non-negative");
+            throw new IllegalArgumentException("Illegal argument: number must be non-negative");
         }
 
         while (number >= cache.size()) {

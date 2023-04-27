@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.containsString;
 
 @QuarkusTest
 public class SequenceNumberControllerTest {
@@ -32,5 +33,16 @@ public class SequenceNumberControllerTest {
             .then()
                 .statusCode(200)
                 .body(is("3"));
+    }
+
+    @Test
+    public void testGetSequenceNumberIllegalArgument() {
+        given()
+            .pathParam("number", -22)
+            .when()
+                .get("/labseq/{number}")
+            .then()
+                .statusCode(400)
+                .body(containsString("Illegal argument: number must be non-negative"));
     }
 }
