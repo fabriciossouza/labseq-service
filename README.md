@@ -47,5 +47,5 @@ http://localhost:8080/labseq/10
 The expected response should be:
 
 ```
-2
+3
 ```
