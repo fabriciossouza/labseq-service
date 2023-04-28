@@ -45,4 +45,14 @@ public class SequenceNumberControllerTest {
                 .statusCode(400)
                 .body(containsString("Illegal argument: number must be non-negative"));
     }
+
+    @Test
+    public void testGetSequencInvalidNumber() {
+        given()
+            .pathParam("number", 2147483648L)
+            .when()
+                .get("/labseq/{number}")
+            .then()
+                .statusCode(404);
+    }
 }

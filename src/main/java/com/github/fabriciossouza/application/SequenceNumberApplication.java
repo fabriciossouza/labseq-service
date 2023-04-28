@@ -12,6 +12,6 @@ public class SequenceNumberApplication {
         this.sequenceNumberService = sequenceNumberService;
     }
     public long getSequenceNumber(Integer number) {
-        return sequenceNumberService.get(number);
+        return sequenceNumberService.calculateLabSeqNumber(number);
     }
 }

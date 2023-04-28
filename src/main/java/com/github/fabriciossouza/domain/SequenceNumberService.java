@@ -1,38 +1,38 @@
 package com.github.fabriciossouza.domain;
 
+import io.quarkus.cache.CacheResult;
 import jakarta.enterprise.context.ApplicationScoped;
 
-import java.util.ArrayList;
-import java.util.List;
+import static java.util.Arrays.copyOf;
 
 @ApplicationScoped
 public class SequenceNumberService {
-    private List<Long> cache;
+    private long[] cache;
 
     public SequenceNumberService() {
-        cache = new ArrayList();
-        cache.add(0L);
-        cache.add(1L);
-        cache.add(0L);
-        cache.add(1L);
+        cache = new long[]{0, 1, 0, 1};
     }
 
-    public long get(int number) {
+    @CacheResult(cacheName = "labseq")
+    public long calculateLabSeqNumber(int number) {
         if (number < 0) {
             throw new IllegalArgumentException("Illegal argument: number must be non-negative");
         }
 
-        while (number >= getSize()) {
-            int size = getSize();
-            long valueAtNMinus4 = cache.get(size - 4);
-            long valueAtNMinus3 = cache.get(size - 3);
-            long result = valueAtNMinus4 + valueAtNMinus3;
-            cache.add(result);
+        if (number < cache.length) {
+            return cache[number];
         }
-        return cache.get(number);
-    }
 
-    private int getSize() {
-        return cache.size();
+        long[] localCache = copyOf(cache, number + 1);
+        for (int i = cache.length; i <= number; i++) {
+            long valueAtNMinus4 = localCache[i - 4];
+            long valueAtNMinus3 =  localCache[i - 3];
+            long newValue = valueAtNMinus4 + valueAtNMinus3;
+
+            localCache[i] = newValue;
+        }
+
+        cache = localCache;
+        return cache[number];
     }
 }

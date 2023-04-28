@@ -1,4 +1,4 @@
-package com.github.fabriciossouza.system;
+package com.github.fabriciossouza.mappers;
 
 
 import jakarta.ws.rs.core.Response;
