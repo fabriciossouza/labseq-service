@@ -49,3 +49,11 @@ The expected response should be:
 ```
 3
 ```
+
+### Documentation
+**Check out the [Swagger](https://labseq-service.herokuapp.com/swagger)**
+
+**Check out the [API Documentation](https://s3.amazonaws.com/fabriciosouza.me/assets/files/Labseq-EN.pdf)**
+
+### Website
+You can check the website [here](https://labseq-front.herokuapp.com/)
