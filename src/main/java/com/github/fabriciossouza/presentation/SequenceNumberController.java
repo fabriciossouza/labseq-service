@@ -13,9 +13,6 @@ public class SequenceNumberController implements SequenceNumberApi {
 
     @Override
     public long getSequenceNumber(int number) {
-        if (number < 0) {
-            throw new InvalidNumberException("Illegal argument: number must be non-negative");
-        }
         return sequenceNumberApplication.getSequenceNumber(number);
     }
 }

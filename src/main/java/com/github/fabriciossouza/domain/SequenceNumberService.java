@@ -19,12 +19,12 @@ public class SequenceNumberService {
             throw new IllegalArgumentException("Illegal argument: number must be non-negative");
         }
 
-        if (number < cache.length) {
+        if (number < getLength()) {
             return cache[number];
         }
 
         long[] localCache = copyOf(cache, number + 1);
-        for (int i = cache.length; i <= number; i++) {
+        for (int i = getLength(); i <= number; i++) {
             long valueAtNMinus4 = localCache[i - 4];
             long valueAtNMinus3 =  localCache[i - 3];
             long newValue = valueAtNMinus4 + valueAtNMinus3;
@@ -34,5 +34,9 @@ public class SequenceNumberService {
 
         cache = localCache;
         return cache[number];
+    }
+
+    private int getLength() {
+        return cache.length;
     }
 }

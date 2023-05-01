@@ -3,7 +3,6 @@ package com.github.fabriciossouza.application;
 import com.github.fabriciossouza.domain.SequenceNumberService;
 import jakarta.enterprise.context.ApplicationScoped;
 
-
 @ApplicationScoped
 public class SequenceNumberApplication {
 
@@ -14,4 +13,5 @@ public class SequenceNumberApplication {
     public long getSequenceNumber(Integer number) {
         return sequenceNumberService.calculateLabSeqNumber(number);
     }
+
 }

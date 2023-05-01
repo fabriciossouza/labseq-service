@@ -54,7 +54,7 @@ public class SequenceNumberServiceTest {
 
     @Test
     public void testNonNegativeValues() {
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 2000 ; i++) {
             long value = sequenceNumberService.calculateLabSeqNumber(i);
             assertTrue(value >= 0, "All values in the sequence should be non-negative");
         }
@@ -66,6 +66,15 @@ public class SequenceNumberServiceTest {
             long current = sequenceNumberService.calculateLabSeqNumber(i);
             long previous = sequenceNumberService.calculateLabSeqNumber(i - 1);
             assertTrue(current != previous + 1 || current != previous - 1, "Sequence should not be strictly increasing or decreasing");
+        }
+    }
+
+    @Test
+    public void testValueGreaterOrEqualHalfIndexValue() {
+        for (int i = 2; i < 100; i++) {
+            long value = sequenceNumberService.calculateLabSeqNumber(i);
+            long halfIndexValue = sequenceNumberService.calculateLabSeqNumber(i / 2);
+            assertTrue(value >= halfIndexValue, "Value at index n should be greater than or equal to value at index n/2");
         }
     }
 

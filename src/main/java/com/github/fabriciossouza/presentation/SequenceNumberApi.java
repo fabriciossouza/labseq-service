@@ -2,6 +2,7 @@ package com.github.fabriciossouza.presentation;
 
 
 import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -25,5 +26,6 @@ public interface SequenceNumberApi {
     )
     long getSequenceNumber(@Parameter(description = "The position number in the labseq sequence", required = true)
                            @Max(value = MAX_VALUE, message = "The number must be within the valid integer range")
+                           @Min(value = 0, message = "The index may be any non-negative integer number")
                            @PathParam("number") int number);
 }

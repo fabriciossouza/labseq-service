@@ -43,7 +43,7 @@ public class SequenceNumberControllerTest {
                 .get("/labseq/{number}")
             .then()
                 .statusCode(400)
-                .body(containsString("Illegal argument: number must be non-negative"));
+                .body(containsString("{\"message\":\"Validation error: getSequenceNumber.number: The index may be any non-negative integer number\"}"));
     }
 
     @Test
@@ -53,6 +53,7 @@ public class SequenceNumberControllerTest {
             .when()
                 .get("/labseq/{number}")
             .then()
-                .statusCode(404);
+                .statusCode(400);
+
     }
 }
