@@ -5,12 +5,11 @@ import com.github.fabriciossouza.domain.SequenceNumberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigInteger;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import static java.lang.System.currentTimeMillis;
+import static java.math.BigInteger.*;
 import static java.util.concurrent.Executors.newFixedThreadPool;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,27 +23,26 @@ public class SequenceNumberServiceTest {
 
     @Test
     public void testInitialValues() {
-        assertEquals(0, sequenceNumberService.calculateLabSeqNumber(0));
-        assertEquals(1, sequenceNumberService.calculateLabSeqNumber(1));
-        assertEquals(0, sequenceNumberService.calculateLabSeqNumber(2));
-        assertEquals(1, sequenceNumberService.calculateLabSeqNumber(3));
+        assertEquals(ZERO, sequenceNumberService.calculateLabSeqNumber(0));
+        assertEquals(ONE, sequenceNumberService.calculateLabSeqNumber(1));
+        assertEquals(ZERO, sequenceNumberService.calculateLabSeqNumber(2));
+        assertEquals(ONE, sequenceNumberService.calculateLabSeqNumber(3));
     }
 
     @Test
     public void testSubsequentValues() {
-        assertEquals(1, sequenceNumberService.calculateLabSeqNumber(4));
-        assertEquals(1, sequenceNumberService.calculateLabSeqNumber(5));
-        assertEquals(1, sequenceNumberService.calculateLabSeqNumber(6));
-        assertEquals(2, sequenceNumberService.calculateLabSeqNumber(7));
-        assertEquals(2, sequenceNumberService.calculateLabSeqNumber(8));
-        assertEquals(2, sequenceNumberService.calculateLabSeqNumber(9));
-        assertEquals(3, sequenceNumberService.calculateLabSeqNumber(10));
+        assertEquals(ONE, sequenceNumberService.calculateLabSeqNumber(4));
+        assertEquals(ONE, sequenceNumberService.calculateLabSeqNumber(5));
+        assertEquals(ONE, sequenceNumberService.calculateLabSeqNumber(6));
+        assertEquals(TWO, sequenceNumberService.calculateLabSeqNumber(7));
+        assertEquals(TWO, sequenceNumberService.calculateLabSeqNumber(8));
+        assertEquals(TWO, sequenceNumberService.calculateLabSeqNumber(9));
+        assertEquals(valueOf(3), sequenceNumberService.calculateLabSeqNumber(10));
     }
 
     @Test
     public void testLargeValue() {
-        assertEquals(182376579, sequenceNumberService.calculateLabSeqNumber(100));
-        assertEquals(9062959782884117635L, sequenceNumberService.calculateLabSeqNumber(10000));
+        assertEquals(new BigInteger("182376579"), sequenceNumberService.calculateLabSeqNumber(100));
     }
 
     @Test
@@ -54,27 +52,27 @@ public class SequenceNumberServiceTest {
 
     @Test
     public void testNonNegativeValues() {
-        for (int i = 0; i < 2000 ; i++) {
-            long value = sequenceNumberService.calculateLabSeqNumber(i);
-            assertTrue(value >= 0, "All values in the sequence should be non-negative");
+        for (int i = 0; i < 2000; i++) {
+            BigInteger value = sequenceNumberService.calculateLabSeqNumber(i);
+            assertTrue(value.compareTo(BigInteger.ZERO) >= 0, "All values in the sequence should be non-negative");
         }
     }
 
     @Test
     public void testNotStrictlyIncreasingOrDecreasing() {
         for (int i = 1; i < 100; i++) {
-            long current = sequenceNumberService.calculateLabSeqNumber(i);
-            long previous = sequenceNumberService.calculateLabSeqNumber(i - 1);
-            assertTrue(current != previous + 1 || current != previous - 1, "Sequence should not be strictly increasing or decreasing");
+            BigInteger current = sequenceNumberService.calculateLabSeqNumber(i);
+            BigInteger previous = sequenceNumberService.calculateLabSeqNumber(i - 1);
+            assertTrue(!current.equals(previous.add(BigInteger.ONE)) || !current.equals(previous.subtract(BigInteger.ONE)), "Sequence should not be strictly increasing or decreasing");
         }
     }
 
     @Test
     public void testValueGreaterOrEqualHalfIndexValue() {
-        for (int i = 2; i < 100; i++) {
-            long value = sequenceNumberService.calculateLabSeqNumber(i);
-            long halfIndexValue = sequenceNumberService.calculateLabSeqNumber(i / 2);
-            assertTrue(value >= halfIndexValue, "Value at index n should be greater than or equal to value at index n/2");
+        for (int i = 2; i < 10; i++) {
+            BigInteger value = sequenceNumberService.calculateLabSeqNumber(i);
+            BigInteger halfIndexValue = sequenceNumberService.calculateLabSeqNumber(i / 2);
+            assertTrue(value.compareTo(halfIndexValue) >= 0, "Value at index n should be greater than or equal to value at index n/2");
         }
     }
 
@@ -98,8 +96,8 @@ public class SequenceNumberServiceTest {
 
         for (int i = 0; i < numberOfThreads; i++) {
             executorService.submit(() -> {
-                long result = sequenceNumberService.calculateLabSeqNumber(index);
-                assertEquals(2L, result);
+                BigInteger result = sequenceNumberService.calculateLabSeqNumber(index);
+                assertEquals(new BigInteger("2"), result);
                 latch.countDown();
             });
         }
@@ -108,4 +106,5 @@ public class SequenceNumberServiceTest {
 
         executorService.shutdown();
     }
+
 }

@@ -3,18 +3,15 @@ package com.github.fabriciossouza.domain;
 import io.quarkus.cache.CacheResult;
 import jakarta.enterprise.context.ApplicationScoped;
 
-import static java.util.Arrays.copyOf;
+import java.math.BigInteger;
 
 @ApplicationScoped
 public class SequenceNumberService {
-    private long[] cache;
 
-    public SequenceNumberService() {
-        cache = new long[]{0, 1, 0, 1};
-    }
+    private BigInteger[] cache = new BigInteger[]{BigInteger.ZERO, BigInteger.ONE, BigInteger.ZERO, BigInteger.ONE};
 
     @CacheResult(cacheName = "labseq")
-    public long calculateLabSeqNumber(int number) {
+    public BigInteger calculateLabSeqNumber(int number) {
         if (number < 0) {
             throw new IllegalArgumentException("Illegal argument: number must be non-negative");
         }
@@ -23,11 +20,13 @@ public class SequenceNumberService {
             return cache[number];
         }
 
-        long[] localCache = copyOf(cache, number + 1);
+        BigInteger[] localCache = new BigInteger[number + 1];
+        System.arraycopy(cache, 0, localCache, 0, getLength());
+
         for (int i = getLength(); i <= number; i++) {
-            long valueAtNMinus4 = localCache[i - 4];
-            long valueAtNMinus3 =  localCache[i - 3];
-            long newValue = valueAtNMinus4 + valueAtNMinus3;
+            BigInteger valueAtNMinus4 = localCache[i - 4];
+            BigInteger valueAtNMinus3 = localCache[i - 3];
+            BigInteger newValue = valueAtNMinus4.add(valueAtNMinus3);
 
             localCache[i] = newValue;
         }

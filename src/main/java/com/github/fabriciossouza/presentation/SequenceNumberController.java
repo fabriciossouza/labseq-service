@@ -2,9 +2,13 @@ package com.github.fabriciossouza.presentation;
 
 
 import com.github.fabriciossouza.application.SequenceNumberApplication;
-import com.github.fabriciossouza.exceptions.InvalidNumberException;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.core.Response;
+
+import java.math.BigInteger;
+
+import static jakarta.ws.rs.core.Response.ok;
 
 @Path("/labseq")
 public class SequenceNumberController implements SequenceNumberApi {
@@ -12,7 +16,9 @@ public class SequenceNumberController implements SequenceNumberApi {
     private SequenceNumberApplication sequenceNumberApplication;
 
     @Override
-    public long getSequenceNumber(int number) {
-        return sequenceNumberApplication.getSequenceNumber(number);
+    public Response getSequenceNumber(int index) {
+        BigInteger number = sequenceNumberApplication.getSequenceNumber(index);
+        return ok(number)
+                .build();
     }
 }
