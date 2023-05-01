@@ -5,10 +5,14 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 import java.math.BigInteger;
 
+import static java.lang.System.arraycopy;
+import static java.math.BigInteger.ONE;
+import static java.math.BigInteger.ZERO;
+
 @ApplicationScoped
 public class SequenceNumberService {
 
-    private BigInteger[] cache = new BigInteger[]{BigInteger.ZERO, BigInteger.ONE, BigInteger.ZERO, BigInteger.ONE};
+    private BigInteger[] cache = new BigInteger[]{ZERO, ONE, ZERO, ONE};
 
     @CacheResult(cacheName = "labseq")
     public BigInteger calculateLabSeqNumber(int number) {
@@ -21,7 +25,7 @@ public class SequenceNumberService {
         }
 
         BigInteger[] localCache = new BigInteger[number + 1];
-        System.arraycopy(cache, 0, localCache, 0, getLength());
+        arraycopy(cache, 0, localCache, 0, getLength());
 
         for (int i = getLength(); i <= number; i++) {
             BigInteger valueAtNMinus4 = localCache[i - 4];

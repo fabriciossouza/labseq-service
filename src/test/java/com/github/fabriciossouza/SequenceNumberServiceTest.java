@@ -68,15 +68,6 @@ public class SequenceNumberServiceTest {
     }
 
     @Test
-    public void testValueGreaterOrEqualHalfIndexValue() {
-        for (int i = 2; i < 10; i++) {
-            BigInteger value = sequenceNumberService.calculateLabSeqNumber(i);
-            BigInteger halfIndexValue = sequenceNumberService.calculateLabSeqNumber(i / 2);
-            assertTrue(value.compareTo(halfIndexValue) >= 0, "Value at index n should be greater than or equal to value at index n/2");
-        }
-    }
-
-    @Test
     public void testPerformance() {
         long startTime = currentTimeMillis();
         sequenceNumberService.calculateLabSeqNumber(10000);

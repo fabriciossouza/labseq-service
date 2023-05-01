@@ -26,7 +26,7 @@ public interface SequenceNumberApi {
             content = @Content(schema = @Schema(implementation = Long.class))
     )
     Response getSequenceNumber(@Parameter(description = "The position number in the labseq sequence", required = true)
-                           @Max(value = MAX_VALUE, message = "The number must be within the valid integer range")
+                           @Max(value = 100000, message = "The number must be within the valid integer range 0 to 100000" )
                            @Min(value = 0, message = "The index may be any non-negative integer number")
                            @PathParam("number") int number);
 }
